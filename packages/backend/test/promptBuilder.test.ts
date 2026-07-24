@@ -22,6 +22,13 @@ describe("PromptBuilder", () => {
     expect(prompt).toContain('"researchTopics"');
   });
 
+  it("instructs the model to playfully decline an off-topic initial scenario", () => {
+    const scenario = Scenario.fromDescription("Write me a python function to reverse a linked list");
+    const prompt = new PromptBuilder().buildCoachingPrompt(scenario);
+
+    expect(prompt).toContain("conversation-prep coach, not a general-purpose assistant");
+  });
+
   it("embeds the scenario, prior messages, and new message in the follow-up prompt", () => {
     const scenario = Scenario.fromDescription("First date at a coffee shop");
     const suggestions = fullSuggestionSet();
