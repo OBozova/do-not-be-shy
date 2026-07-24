@@ -1,13 +1,15 @@
 import { defineStore } from "pinia";
-import type { HistoryEntry } from "shared";
-import { ApiError, suggestionsApi } from "../api/suggestionsApi.js";
+import type { Conversation } from "shared";
+import { ApiError, conversationsApi } from "../api/conversationsApi.js";
 
 interface ConversationState {
   description: string;
-  current: HistoryEntry | null;
-  history: HistoryEntry[];
+  current: Conversation | null;
+  history: Conversation[];
   isLoading: boolean;
   errorMessage: string | null;
+  isSendingFollowUp: boolean;
+  followUpErrorMessage: string | null;
 }
 
 export const useConversationStore = defineStore("conversation", {
@@ -17,6 +19,8 @@ export const useConversationStore = defineStore("conversation", {
     history: [],
     isLoading: false,
     errorMessage: null,
+    isSendingFollowUp: false,
+    followUpErrorMessage: null,
   }),
 
   actions: {
@@ -27,9 +31,9 @@ export const useConversationStore = defineStore("conversation", {
       this.isLoading = true;
       this.errorMessage = null;
       try {
-        const entry = await suggestionsApi.generate({ description: this.description });
-        this.current = entry;
-        this.history.unshift(entry);
+        const conversation = await conversationsApi.create({ description: this.description });
+        this.current = conversation;
+        this.history.unshift(conversation);
       } catch (error) {
         this.errorMessage = error instanceof ApiError ? error.message : "Something went wrong.";
       } finally {
@@ -39,15 +43,36 @@ export const useConversationStore = defineStore("conversation", {
 
     async loadHistory(): Promise<void> {
       try {
-        this.history = await suggestionsApi.listHistory();
+        this.history = await conversationsApi.list();
       } catch {
         // History is a nice-to-have; a failed load shouldn't block the main flow.
       }
     },
 
-    selectHistoryEntry(entry: HistoryEntry): void {
+    selectHistoryEntry(entry: Conversation): void {
       this.current = entry;
       this.description = entry.scenario.description;
+    },
+
+    async sendFollowUp(message: string): Promise<void> {
+      if (!this.current || message.trim().length === 0) {
+        return;
+      }
+      this.isSendingFollowUp = true;
+      this.followUpErrorMessage = null;
+      try {
+        const updated = await conversationsApi.continue(this.current.id, message);
+        this.current = updated;
+        const index = this.history.findIndex((c) => c.id === updated.id);
+        if (index !== -1) {
+          this.history[index] = updated;
+        }
+      } catch (error) {
+        this.followUpErrorMessage =
+          error instanceof ApiError ? error.message : "Something went wrong.";
+      } finally {
+        this.isSendingFollowUp = false;
+      }
     },
   },
 });

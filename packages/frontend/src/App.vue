@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import ScenarioForm from "./components/ScenarioForm.vue";
 import SuggestionBoard from "./components/SuggestionBoard.vue";
+import ConversationThread from "./components/ConversationThread.vue";
 import HistoryPanel from "./components/HistoryPanel.vue";
 </script>
 
@@ -13,6 +14,7 @@ import HistoryPanel from "./components/HistoryPanel.vue";
       </header>
       <ScenarioForm />
       <SuggestionBoard />
+      <ConversationThread />
     </main>
     <HistoryPanel />
   </div>

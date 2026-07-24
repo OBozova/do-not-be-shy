@@ -20,15 +20,25 @@ export const SUGGESTION_CATEGORY_LABELS: Record<SuggestionCategory, string> = {
 
 export type SuggestionSet = Record<SuggestionCategory, string[]>;
 
-export interface HistoryEntry {
+export type ConversationRole = "user" | "assistant";
+
+export interface ConversationMessage {
   id: string;
-  scenario: ScenarioInput;
-  suggestions: SuggestionSet;
+  role: ConversationRole;
+  content: string;
   createdAt: string;
 }
 
-export interface HistoryListResponse {
-  entries: HistoryEntry[];
+export interface Conversation {
+  id: string;
+  scenario: ScenarioInput;
+  suggestions: SuggestionSet;
+  messages: ConversationMessage[];
+  createdAt: string;
+}
+
+export interface ConversationListResponse {
+  conversations: Conversation[];
 }
 
 export interface ApiErrorResponse {

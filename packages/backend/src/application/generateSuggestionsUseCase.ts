@@ -1,8 +1,8 @@
 import { randomUUID } from "node:crypto";
-import type { HistoryEntry, ScenarioInput } from "shared";
+import type { Conversation, ScenarioInput } from "shared";
 import { Scenario } from "../domain/scenario.js";
 import type { ConversationCoachService } from "../domain/services/conversationCoachService.js";
-import type { HistoryRepository } from "../domain/ports/historyRepository.js";
+import type { ConversationRepository } from "../domain/ports/conversationRepository.js";
 
 /**
  * Application-layer use case: translates a raw request DTO into domain
@@ -12,21 +12,22 @@ import type { HistoryRepository } from "../domain/ports/historyRepository.js";
 export class GenerateSuggestionsUseCase {
   constructor(
     private readonly coach: ConversationCoachService,
-    private readonly history: HistoryRepository,
+    private readonly conversations: ConversationRepository,
   ) {}
 
-  async execute(input: ScenarioInput): Promise<HistoryEntry> {
+  async execute(input: ScenarioInput): Promise<Conversation> {
     const scenario = Scenario.fromDescription(input.description);
     const suggestions = await this.coach.coach(scenario);
 
-    const entry: HistoryEntry = {
+    const conversation: Conversation = {
       id: randomUUID(),
       scenario: { description: scenario.description },
       suggestions,
+      messages: [],
       createdAt: new Date().toISOString(),
     };
 
-    await this.history.add(entry);
-    return entry;
+    await this.conversations.add(conversation);
+    return conversation;
   }
 }

@@ -1,6 +1,6 @@
 import type { SuggestionSet } from "shared";
 import type { Scenario } from "../../domain/scenario.js";
-import type { LlmPort } from "../../domain/ports/llmPort.js";
+import type { ContinueConversationInput, LlmPort } from "../../domain/ports/llmPort.js";
 import { LlmUnavailableError, InvalidLlmResponseError } from "../../domain/errors.js";
 import { PromptBuilder } from "./promptBuilder.js";
 import { suggestionSetSchema } from "./suggestionSchema.js";
@@ -25,11 +25,16 @@ export class OllamaAdapter implements LlmPort {
 
   async generateSuggestions(scenario: Scenario): Promise<SuggestionSet> {
     const prompt = this.promptBuilder.buildCoachingPrompt(scenario);
-    const raw = await this.callOllama(prompt);
-    return this.parseAndValidate(raw.response);
+    const raw = await this.callOllama(prompt, { json: true });
+    return this.parseAndValidate(raw);
   }
 
-  private async callOllama(prompt: string): Promise<OllamaGenerateResponse> {
+  async continueConversation(input: ContinueConversationInput): Promise<string> {
+    const prompt = this.promptBuilder.buildFollowUpPrompt(input);
+    return this.callOllama(prompt, { json: false });
+  }
+
+  private async callOllama(prompt: string, opts: { json: boolean }): Promise<string> {
     try {
       const res = await fetch(`${this.host}/api/generate`, {
         method: "POST",
@@ -37,14 +42,15 @@ export class OllamaAdapter implements LlmPort {
         body: JSON.stringify({
           model: this.model,
           prompt,
-          format: "json",
+          ...(opts.json ? { format: "json" } : {}),
           stream: false,
         }),
       });
       if (!res.ok) {
         throw new Error(`Ollama responded with HTTP ${res.status}`);
       }
-      return (await res.json()) as OllamaGenerateResponse;
+      const body = (await res.json()) as OllamaGenerateResponse;
+      return body.response;
     } catch (cause) {
       throw new LlmUnavailableError(cause);
     }

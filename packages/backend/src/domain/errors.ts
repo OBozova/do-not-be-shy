@@ -15,3 +15,17 @@ export class InvalidLlmResponseError extends Error {
     this.cause = cause;
   }
 }
+
+export class EmptyReplyError extends Error {
+  constructor() {
+    super("The LLM returned an empty reply.");
+    this.name = "EmptyReplyError";
+  }
+}
+
+export class ConversationNotFoundError extends Error {
+  constructor(conversationId: string) {
+    super(`No conversation found with id "${conversationId}".`);
+    this.name = "ConversationNotFoundError";
+  }
+}

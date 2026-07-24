@@ -1,5 +1,13 @@
-import type { SuggestionSet } from "shared";
+import type { ConversationMessage, SuggestionSet } from "shared";
 import type { Scenario } from "../scenario.js";
+import type { UserMessage } from "../userMessage.js";
+
+export interface ContinueConversationInput {
+  scenario: Scenario;
+  suggestions: SuggestionSet;
+  priorMessages: ConversationMessage[];
+  message: UserMessage;
+}
 
 /**
  * Everything the domain needs from a language model, and nothing more.
@@ -8,4 +16,5 @@ import type { Scenario } from "../scenario.js";
  */
 export interface LlmPort {
   generateSuggestions(scenario: Scenario): Promise<SuggestionSet>;
+  continueConversation(input: ContinueConversationInput): Promise<string>;
 }

@@ -6,11 +6,11 @@ import { InvalidScenarioError } from "../../../domain/scenario.js";
 import { LlmUnavailableError, InvalidLlmResponseError } from "../../../domain/errors.js";
 import { EmptySuggestionSetError } from "../../../domain/suggestion.js";
 
-export function registerSuggestionsRoute(
+export function registerCreateConversationRoute(
   app: FastifyInstance,
   useCase: GenerateSuggestionsUseCase,
 ): void {
-  app.post("/api/suggestions", async (request, reply) => {
+  app.post("/api/conversations", async (request, reply) => {
     const parsed = scenarioRequestSchema.safeParse(request.body);
     if (!parsed.success) {
       const body: ApiErrorResponse = {
@@ -21,8 +21,8 @@ export function registerSuggestionsRoute(
     }
 
     try {
-      const entry = await useCase.execute(parsed.data);
-      return reply.status(201).send(entry);
+      const conversation = await useCase.execute(parsed.data);
+      return reply.status(201).send(conversation);
     } catch (error) {
       return sendCoachingError(error, reply);
     }

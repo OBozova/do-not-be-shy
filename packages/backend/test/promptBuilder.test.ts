@@ -1,6 +1,14 @@
 import { describe, expect, it } from "vitest";
+import { SUGGESTION_CATEGORIES, type SuggestionSet } from "shared";
 import { Scenario } from "../src/domain/scenario.js";
+import { UserMessage } from "../src/domain/userMessage.js";
 import { PromptBuilder } from "../src/infrastructure/llm/promptBuilder.js";
+
+function fullSuggestionSet(): SuggestionSet {
+  return Object.fromEntries(
+    SUGGESTION_CATEGORIES.map((category) => [category, [`sample ${category}`]]),
+  ) as SuggestionSet;
+}
 
 describe("PromptBuilder", () => {
   it("embeds the scenario description and required JSON keys in the prompt", () => {
@@ -12,5 +20,24 @@ describe("PromptBuilder", () => {
     expect(prompt).toContain('"jokes"');
     expect(prompt).toContain('"talkingPoints"');
     expect(prompt).toContain('"researchTopics"');
+  });
+
+  it("embeds the scenario, prior messages, and new message in the follow-up prompt", () => {
+    const scenario = Scenario.fromDescription("First date at a coffee shop");
+    const suggestions = fullSuggestionSet();
+    const prompt = new PromptBuilder().buildFollowUpPrompt({
+      scenario,
+      suggestions,
+      priorMessages: [
+        { id: "1", role: "user", content: "What's a good opener?", createdAt: "" },
+        { id: "2", role: "assistant", content: "Try asking about their day.", createdAt: "" },
+      ],
+      message: UserMessage.fromText("Explain that joke"),
+    });
+
+    expect(prompt).toContain("First date at a coffee shop");
+    expect(prompt).toContain("What's a good opener?");
+    expect(prompt).toContain("Try asking about their day.");
+    expect(prompt).toContain("Explain that joke");
   });
 });
