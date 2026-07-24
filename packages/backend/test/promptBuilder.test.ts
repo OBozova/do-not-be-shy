@@ -40,4 +40,17 @@ describe("PromptBuilder", () => {
     expect(prompt).toContain("Try asking about their day.");
     expect(prompt).toContain("Explain that joke");
   });
+
+  it("instructs the model to playfully decline off-topic follow-up requests", () => {
+    const scenario = Scenario.fromDescription("First date at a coffee shop");
+    const suggestions = fullSuggestionSet();
+    const prompt = new PromptBuilder().buildFollowUpPrompt({
+      scenario,
+      suggestions,
+      priorMessages: [],
+      message: UserMessage.fromText("Write me a python function to reverse a linked list"),
+    });
+
+    expect(prompt).toContain("conversation-prep coach, not a general-purpose assistant");
+  });
 });
