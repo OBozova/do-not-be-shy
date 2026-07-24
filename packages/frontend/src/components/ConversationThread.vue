@@ -1,15 +1,7 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import { useConversationStore } from "../store/conversationStore.js";
 
 const store = useConversationStore();
-const draft = ref("");
-
-function onSubmit(): void {
-  const message = draft.value;
-  draft.value = "";
-  void store.sendFollowUp(message);
-}
 </script>
 
 <template>
@@ -25,20 +17,8 @@ function onSubmit(): void {
       </li>
     </ul>
     <p v-else class="empty-state">
-      Ask a follow-up — e.g. "explain that joke" or "give me a few more talking points".
+      Ask a follow-up below — e.g. "explain that joke" or "give me a few more talking points".
     </p>
-    <form class="follow-up-form" @submit.prevent="onSubmit">
-      <textarea
-        v-model="draft"
-        rows="2"
-        placeholder="Ask a follow-up…"
-        :disabled="store.isSendingFollowUp"
-      />
-      <button type="submit" :disabled="store.isSendingFollowUp || draft.trim().length === 0">
-        {{ store.isSendingFollowUp ? "Thinking…" : "Send" }}
-      </button>
-    </form>
-    <p v-if="store.followUpErrorMessage" class="error">{{ store.followUpErrorMessage }}</p>
   </section>
 </template>
 
@@ -85,43 +65,8 @@ h2 {
   border: 1px solid var(--border-color);
 }
 
-.follow-up-form {
-  display: flex;
-  gap: 0.5rem;
-  align-items: flex-start;
-}
-
-textarea {
-  flex: 1;
-  font: inherit;
-  padding: 0.6rem;
-  border-radius: 8px;
-  border: 1px solid var(--border-color);
-  resize: vertical;
-}
-
-button {
-  padding: 0.6rem 1.2rem;
-  border-radius: 8px;
-  border: none;
-  background: var(--accent-color);
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
 .empty-state {
   color: var(--muted-color);
   font-style: italic;
-}
-
-.error {
-  color: #c0392b;
-  font-size: 0.9rem;
 }
 </style>

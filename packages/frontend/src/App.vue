@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import ScenarioForm from "./components/ScenarioForm.vue";
 import SuggestionBoard from "./components/SuggestionBoard.vue";
 import ConversationThread from "./components/ConversationThread.vue";
+import ConversationInput from "./components/ConversationInput.vue";
 import HistoryPanel from "./components/HistoryPanel.vue";
 </script>
 
@@ -12,9 +12,9 @@ import HistoryPanel from "./components/HistoryPanel.vue";
         <h1>Do Not Be Shy</h1>
         <p class="tagline">Conversation prep for whatever's next.</p>
       </header>
-      <ScenarioForm />
       <SuggestionBoard />
       <ConversationThread />
+      <ConversationInput />
     </main>
     <HistoryPanel />
   </div>

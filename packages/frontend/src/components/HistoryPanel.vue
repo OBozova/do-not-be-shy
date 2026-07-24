@@ -3,10 +3,19 @@ import { onMounted } from "vue";
 import { useConversationStore } from "../store/conversationStore.js";
 
 const store = useConversationStore();
+const PREVIEW_WORD_COUNT = 6;
 
 onMounted(() => {
   void store.loadHistory();
 });
+
+function preview(description: string): string {
+  const words = description.trim().split(/\s+/);
+  if (words.length <= PREVIEW_WORD_COUNT) {
+    return words.join(" ");
+  }
+  return `${words.slice(0, PREVIEW_WORD_COUNT).join(" ")}…`;
+}
 </script>
 
 <template>
@@ -22,7 +31,7 @@ onMounted(() => {
         :class="{ active: store.current?.id === entry.id }"
         @click="store.selectHistoryEntry(entry)"
       >
-        {{ entry.scenario.description }}
+        {{ preview(entry.scenario.description) }}
       </li>
     </ul>
   </aside>

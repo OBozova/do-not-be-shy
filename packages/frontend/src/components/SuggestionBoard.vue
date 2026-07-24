@@ -27,7 +27,7 @@ const cards = computed(() => {
       :items="card.items"
     />
   </div>
-  <p v-else class="empty-state">Describe a situation above to get conversation-ready.</p>
+  <p v-else class="empty-state">Describe a situation below to get conversation-ready.</p>
 </template>
 
 <style scoped>
