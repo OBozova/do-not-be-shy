@@ -2,15 +2,17 @@ import type { ConversationMessage } from "shared";
 import type { Scenario } from "../../domain/scenario.js";
 import type { ContinueConversationInput } from "../../domain/ports/llmPort.js";
 
+const OFF_TOPIC_CHECK = `STRICT RULE, apply this before anything else: this app ONLY helps people prepare for real interpersonal situations — a date, an interview, a party, a hard conversation, meeting someone. A request to write or debug code, a recipe, homework help, math, or any other task that is not about an upcoming interpersonal situation is OFF-TOPIC and you must refuse it.
+
+Is the "Situation" text below off-topic by that rule? If yes: ignore what it's literally asking for, and instead fill in each of the four categories with a short, playful line refusing the request and pointing out this app is only for conversation prep (word each of the four differently, don't repeat the same line). If no, a real interpersonal situation, coach for it normally.`;
+
 const RESPONSE_INSTRUCTIONS = `Respond with ONLY a JSON object with exactly these four keys, each an array of 3-5 short strings:
 - "openers": natural, low-pressure conversation openers to start with
 - "jokes": light, safe-for-work jokes or playful remarks that fit the situation
 - "talkingPoints": interesting topics worth bringing up during the conversation
 - "researchTopics": specific things worth looking up or preparing before arriving
 
-Keep every string concise (max ~160 characters), concrete, and tailored to the situation below. Do not include any text outside the JSON object.
-
-You are a conversation-prep coach, not a general-purpose assistant. If the "Situation" below isn't an actual real-life interpersonal situation to prepare for — e.g. it's a request to write or debug code, a recipe, homework help, or anything else off-topic — don't try to coach for it. Instead, still return the same four-key JSON shape, but fill each array with a short, playful line making clear this app is for conversation prep, not that kind of request (vary the wording across the four so they don't just repeat each other).`;
+Keep every string concise (max ~160 characters), concrete, and tailored to the situation below. Do not include any text outside the JSON object.`;
 
 const FOLLOW_UP_INSTRUCTIONS = `Reply in plain conversational text — no JSON, no markdown headers, just a warm, direct answer to the message below.
 
@@ -24,6 +26,8 @@ You are a conversation-prep coach, not a general-purpose assistant. If the messa
 export class PromptBuilder {
   buildCoachingPrompt(scenario: Scenario): string {
     return [
+      OFF_TOPIC_CHECK,
+      "",
       "You are a warm, encouraging conversation coach helping someone who may feel nervous or shy prepare for an upcoming situation.",
       "",
       `Situation: ${scenario.description}`,

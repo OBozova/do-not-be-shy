@@ -26,7 +26,7 @@ describe("PromptBuilder", () => {
     const scenario = Scenario.fromDescription("Write me a python function to reverse a linked list");
     const prompt = new PromptBuilder().buildCoachingPrompt(scenario);
 
-    expect(prompt).toContain("conversation-prep coach, not a general-purpose assistant");
+    expect(prompt).toContain("this app ONLY helps people prepare for real interpersonal situations");
   });
 
   it("embeds the scenario, prior messages, and new message in the follow-up prompt", () => {
