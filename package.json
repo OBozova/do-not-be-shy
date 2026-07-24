@@ -1,0 +1,18 @@
+{
+  "name": "do-not-be-shy",
+  "private": true,
+  "version": "1.0.0",
+  "description": "AI conversation prep assistant — openers, jokes, talking points and research topics for any upcoming situation.",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:backend": "npm run dev --workspace=backend",
+    "dev:frontend": "npm run dev --workspace=frontend",
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm run test --workspace=backend"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

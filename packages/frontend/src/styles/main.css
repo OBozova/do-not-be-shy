@@ -1,0 +1,32 @@
+:root {
+  --border-color: #d8d8e0;
+  --card-background: #f7f7fb;
+  --accent-color: #5a4bda;
+  --muted-color: #6b6b78;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --border-color: #35353f;
+    --card-background: #1c1c22;
+    --accent-color: #8f7bff;
+    --muted-color: #8f8f9c;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family:
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+  background: canvas;
+  color: canvastext;
+}
