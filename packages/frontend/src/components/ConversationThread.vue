@@ -1,15 +1,31 @@
 <script setup lang="ts">
+import { computed } from "vue";
+import type { ConversationMessage } from "shared";
 import { useConversationStore } from "../store/conversationStore.js";
 
 const store = useConversationStore();
+
+/**
+ * Each follow-up appends a user+assistant pair. Newest pair first, so a new
+ * message shows up right under the input and pushes earlier ones down —
+ * user/assistant order within a pair stays intact.
+ */
+const orderedMessages = computed<ConversationMessage[]>(() => {
+  const messages = store.current?.messages ?? [];
+  const pairs: ConversationMessage[][] = [];
+  for (let i = 0; i < messages.length; i += 2) {
+    pairs.push(messages.slice(i, i + 2));
+  }
+  return pairs.reverse().flat();
+});
 </script>
 
 <template>
   <section v-if="store.current" class="conversation-thread">
     <h2>Follow up</h2>
-    <ul v-if="store.current.messages.length > 0" class="messages">
+    <ul v-if="orderedMessages.length > 0" class="messages">
       <li
-        v-for="message in store.current.messages"
+        v-for="message in orderedMessages"
         :key="message.id"
         :class="['message', message.role]"
       >
@@ -17,7 +33,7 @@ const store = useConversationStore();
       </li>
     </ul>
     <p v-else class="empty-state">
-      Ask a follow-up below — e.g. "explain that joke" or "give me a few more talking points".
+      Ask a follow-up above — e.g. "explain that joke" or "give me a few more talking points".
     </p>
   </section>
 </template>

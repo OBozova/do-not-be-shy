@@ -24,6 +24,15 @@ const errorMessage = computed(() => store.errorMessage ?? store.followUpErrorMes
 function onSubmit(): void {
   void store.submit();
 }
+
+function onKeydown(event: KeyboardEvent): void {
+  if (event.key === "Enter" && !event.shiftKey) {
+    event.preventDefault();
+    if (!isBusy.value && store.description.trim().length > 0) {
+      onSubmit();
+    }
+  }
+}
 </script>
 
 <template>
@@ -34,6 +43,7 @@ function onSubmit(): void {
       v-model="store.description"
       rows="3"
       :placeholder="placeholder"
+      @keydown="onKeydown"
     />
     <div class="actions">
       <button type="submit" :disabled="isBusy || store.description.trim().length === 0">
