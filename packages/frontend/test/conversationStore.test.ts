@@ -113,7 +113,9 @@ describe("conversationStore", () => {
 
       await store.submit();
 
-      expect(conversationsApi.continue).toHaveBeenCalledWith("conversation-1", "Explain that joke");
+      expect(conversationsApi.continue).toHaveBeenCalledWith("conversation-1", {
+        message: "Explain that joke",
+      });
       expect(store.current).toEqual(updated);
       expect(store.history[0]).toEqual(updated);
       expect(store.description).toBe("");

@@ -60,7 +60,9 @@ describe("conversationsApi", () => {
     const conversation = sampleConversation();
     vi.mocked(fetch).mockResolvedValue(jsonResponse(conversation));
 
-    const result = await conversationsApi.continue("conversation-1", "Explain that joke");
+    const result = await conversationsApi.continue("conversation-1", {
+      message: "Explain that joke",
+    });
 
     expect(fetch).toHaveBeenCalledWith(
       "/api/conversations/conversation-1/messages",

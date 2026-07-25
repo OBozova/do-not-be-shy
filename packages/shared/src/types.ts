@@ -2,6 +2,10 @@ export interface ScenarioInput {
   description: string;
 }
 
+export interface FollowUpMessageInput {
+  message: string;
+}
+
 export const SUGGESTION_CATEGORIES = [
   "openers",
   "jokes",

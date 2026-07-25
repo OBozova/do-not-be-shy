@@ -2,6 +2,7 @@ import type {
   ApiErrorResponse,
   Conversation,
   ConversationListResponse,
+  FollowUpMessageInput,
   ScenarioInput,
 } from "shared";
 
@@ -40,11 +41,11 @@ export const conversationsApi = {
     return data.conversations;
   },
 
-  async continue(conversationId: string, message: string): Promise<Conversation> {
+  async continue(conversationId: string, input: FollowUpMessageInput): Promise<Conversation> {
     const response = await fetch(`/api/conversations/${conversationId}/messages`, {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ message }),
+      body: JSON.stringify(input),
     });
     return parseJsonOrThrow<Conversation>(response);
   },

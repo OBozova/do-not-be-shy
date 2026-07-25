@@ -60,7 +60,7 @@ export const useConversationStore = defineStore("conversation", {
       this.isSendingFollowUp = true;
       this.followUpErrorMessage = null;
       try {
-        const updated = await conversationsApi.continue(this.current.id, message);
+        const updated = await conversationsApi.continue(this.current.id, { message });
         this.current = updated;
         const index = this.history.findIndex((c) => c.id === updated.id);
         if (index !== -1) {
