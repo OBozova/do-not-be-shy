@@ -19,7 +19,9 @@ const buttonLabel = computed(() => {
   return store.current ? "Send" : "Get suggestions";
 });
 
-const errorMessage = computed(() => store.errorMessage ?? store.followUpErrorMessage);
+const errorMessage = computed(
+  () => store.errorMessage ?? store.followUpErrorMessage,
+);
 
 function onSubmit(): void {
   void store.submit();
@@ -36,8 +38,14 @@ function onKeydown(event: KeyboardEvent): void {
 </script>
 
 <template>
-  <form class="conversation-input" @submit.prevent="onSubmit">
-    <label v-if="!store.current" for="description">Describe the situation you're walking into</label>
+  <form
+    class="conversation-input"
+    @submit.prevent="onSubmit"
+  >
+    <label
+      v-if="!store.current"
+      for="description"
+    >Describe the situation you're walking into</label>
     <textarea
       id="description"
       v-model="store.description"
@@ -46,7 +54,10 @@ function onKeydown(event: KeyboardEvent): void {
       @keydown="onKeydown"
     />
     <div class="actions">
-      <button type="submit" :disabled="isBusy || store.description.trim().length === 0">
+      <button
+        type="submit"
+        :disabled="isBusy || store.description.trim().length === 0"
+      >
         {{ buttonLabel }}
       </button>
       <button
@@ -58,7 +69,12 @@ function onKeydown(event: KeyboardEvent): void {
         New conversation
       </button>
     </div>
-    <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+    <p
+      v-if="errorMessage"
+      class="error"
+    >
+      {{ errorMessage }}
+    </p>
   </form>
 </template>
 

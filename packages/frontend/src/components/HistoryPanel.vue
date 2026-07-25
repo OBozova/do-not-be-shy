@@ -21,7 +21,10 @@ function preview(description: string): string {
 <template>
   <aside class="history-panel">
     <h2>History</h2>
-    <p v-if="store.history.length === 0" class="empty-state">
+    <p
+      v-if="store.history.length === 0"
+      class="empty-state"
+    >
       Past situations will show up here.
     </p>
     <ul v-else>

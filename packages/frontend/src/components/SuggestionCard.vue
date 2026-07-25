@@ -9,7 +9,12 @@ defineProps<{
   <div class="suggestion-card">
     <h3>{{ title }}</h3>
     <ul>
-      <li v-for="item in items" :key="item">{{ item }}</li>
+      <li
+        v-for="item in items"
+        :key="item"
+      >
+        {{ item }}
+      </li>
     </ul>
   </div>
 </template>

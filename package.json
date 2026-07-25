@@ -11,9 +11,24 @@
     "dev:frontend": "npm run dev --workspace=frontend",
     "build": "npm run build --workspaces --if-present",
     "test": "npm run test --workspace=backend && npm run test --workspace=frontend",
-    "test:coverage": "npm run test:coverage --workspace=backend && npm run test:coverage --workspace=frontend"
+    "test:coverage": "npm run test:coverage --workspace=backend && npm run test:coverage --workspace=frontend",
+    "lint": "eslint .",
+    "prepare": "husky"
   },
   "engines": {
     "node": ">=20"
+  },
+  "lint-staged": {
+    "*.{ts,vue}": "eslint --fix"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.8.0",
+    "eslint-plugin-vue": "^10.10.0",
+    "globals": "^17.7.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "typescript-eslint": "^8.65.0",
+    "vue-eslint-parser": "^10.4.1"
   }
 }

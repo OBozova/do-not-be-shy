@@ -18,8 +18,16 @@ const cards = computed(() => {
 </script>
 
 <template>
-  <div v-if="store.isLoading" class="empty-state">Coaching in progress…</div>
-  <div v-else-if="cards.length > 0" class="suggestion-board">
+  <div
+    v-if="store.isLoading"
+    class="empty-state"
+  >
+    Coaching in progress…
+  </div>
+  <div
+    v-else-if="cards.length > 0"
+    class="suggestion-board"
+  >
     <SuggestionCard
       v-for="card in cards"
       :key="card.category"
@@ -27,7 +35,12 @@ const cards = computed(() => {
       :items="card.items"
     />
   </div>
-  <p v-else class="empty-state">Describe a situation above to get conversation-ready.</p>
+  <p
+    v-else
+    class="empty-state"
+  >
+    Describe a situation above to get conversation-ready.
+  </p>
 </template>
 
 <style scoped>

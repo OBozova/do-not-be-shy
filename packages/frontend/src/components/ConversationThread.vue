@@ -21,9 +21,15 @@ const orderedMessages = computed<ConversationMessage[]>(() => {
 </script>
 
 <template>
-  <section v-if="store.current" class="conversation-thread">
+  <section
+    v-if="store.current"
+    class="conversation-thread"
+  >
     <h2>Follow up</h2>
-    <ul v-if="orderedMessages.length > 0" class="messages">
+    <ul
+      v-if="orderedMessages.length > 0"
+      class="messages"
+    >
       <li
         v-for="message in orderedMessages"
         :key="message.id"
@@ -32,7 +38,10 @@ const orderedMessages = computed<ConversationMessage[]>(() => {
         {{ message.content }}
       </li>
     </ul>
-    <p v-else class="empty-state">
+    <p
+      v-else
+      class="empty-state"
+    >
       Ask a follow-up above — e.g. "explain that joke" or "give me a few more talking points".
     </p>
   </section>

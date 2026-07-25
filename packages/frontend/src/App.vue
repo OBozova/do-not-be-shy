@@ -10,7 +10,9 @@ import HistoryPanel from "./components/HistoryPanel.vue";
     <main>
       <header>
         <h1>Do Not Be Shy</h1>
-        <p class="tagline">Conversation prep for whatever's next.</p>
+        <p class="tagline">
+          Conversation prep for whatever's next.
+        </p>
       </header>
       <ConversationInput />
       <ConversationThread />
