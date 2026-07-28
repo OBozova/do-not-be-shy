@@ -80,9 +80,15 @@ function onKeydown(event: KeyboardEvent): void {
 
 <style scoped>
 .conversation-input {
+  position: sticky;
+  top: 0;
+  z-index: 10;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  padding: 1rem 0 0.75rem;
+  background: canvas;
+  border-bottom: 1px solid var(--border-color);
 }
 
 label {
